@@ -1,59 +1,15 @@
-/*
-** pam_test.c for pam in /home/takos/Crypto_test
-** 
-** Made by takos
-** Login   <kostas.konovodoff@epitech.eu>
-** 
-** Started on  Wed Nov 22 16:58:01 2017 takos
-** Last update Thu Nov 23 16:57:10 2017 takos
-*/
-
 #include <security/pam_appl.h>
-#include <security/pam_misc.h>
 #include <security/pam_modules.h>
 #include <stdio.h>
 
-static struct pam_conv conv = {
-  misc_conv,
-  NULL
-};
-
-int main(int argc, char **argv)
+PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **argv)
 {
-  pam_handle_t *pamh = NULL;
-  int retval;
-  const char *user = "nobody";
+  fprintf(stdout, "Auth enter.\n");
+  return (PAM_SUCCESS);
+}
 
-  if (argc == 2)
-    user = argv[1];
-
-  if (argc > 2 || argc < 2)
-    {
-      fprintf(stderr, "Usage : check_user [username]\n");
-      exit(1);
-    }
-  retval = pam_start("check_user", user, &conv, &pamh);
-
-  if (retval == PAM_SUCCESS)
-    retval = pam_authenticate(pamh, 0);
-  printf("A");
-  if (retval == PAM_SUCCESS)
-    fprintf(stdout, "Auth success!\n");
-  printf("B");
-  if (retval == PAM_SUCCESS)
-    retval = pam_acct_mgmt(pamh, 0);
-  printf("C");
-  if (retval == PAM_SUCCESS)
-    fprintf(stdout, "Authenticated success!\n");
-  else
-    fprintf(stdout, "Authenticated failed.\n");
-  printf("D");
-  if (pam_end(pamh, retval) != PAM_SUCCESS)
-    {
-      pamh = NULL;
-      fprintf(stderr, "check_user: failed to release authenticator.\n");
-      exit(1);
-    }
-
-  return (retval == PAM_SUCCESS ? 0:1);
+PAM_EXTERN int pam_sm_acct_mgmt(pam_handle_t *pamh, int flags, int argc, const char **argv)
+{
+  fprintf(stdout, "Acct_mgmt enter.\n");
+  return (PAM_SUCCESS);
 }
