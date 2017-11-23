@@ -5,7 +5,7 @@
 ** Login   <kostas.konovodoff@epitech.eu>
 ** 
 ** Started on  Wed Nov 22 16:58:01 2017 takos
-** Last update Thu Nov 23 16:57:10 2017 takos
+** Last update Thu Nov 23 17:10:09 2017 takos
 */
 
 #include <security/pam_appl.h>
@@ -36,18 +36,12 @@ int main(int argc, char **argv)
 
   if (retval == PAM_SUCCESS)
     retval = pam_authenticate(pamh, 0);
-  printf("A");
-  if (retval == PAM_SUCCESS)
-    fprintf(stdout, "Auth success!\n");
-  printf("B");
   if (retval == PAM_SUCCESS)
     retval = pam_acct_mgmt(pamh, 0);
-  printf("C");
   if (retval == PAM_SUCCESS)
     fprintf(stdout, "Authenticated success!\n");
   else
     fprintf(stdout, "Authenticated failed.\n");
-  printf("D");
   if (pam_end(pamh, retval) != PAM_SUCCESS)
     {
       pamh = NULL;
