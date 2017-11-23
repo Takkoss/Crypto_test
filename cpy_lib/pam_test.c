@@ -4,7 +4,13 @@
 
 PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **argv)
 {
-  fprintf(stdout, "Auth enter.\n");
+  const char *user = NULL;
+  int  retval;
+  
+  fprintf(stdout, "enter");
+  retval = pam_get_user(pamh, &user, NULL);
+  if (retval != PAM_SUCCESS || user == NULL)
+    fprintf(stdout, "User failed.");
   return (PAM_SUCCESS);
 }
 

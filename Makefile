@@ -5,7 +5,7 @@
 ## Login   <kostas.konovodoff@epitech.eu>
 ## 
 ## Started on  Thu Nov 23 17:15:28 2017 takos
-## Last update Thu Nov 23 18:11:22 2017 takos
+## Last update Thu Nov 23 18:41:10 2017 takos
 ##
 
 NAME		= test
@@ -13,6 +13,8 @@ NAME		= test
 SRCS		= pam_main.c
 
 LDFLAGS		+= -lpam -lpam_misc
+
+LIBFLAGS	+= -fPIC -fno-stack-protector
 
 RM		= rm -f
 
@@ -24,6 +26,11 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
+
+install:
+	$(CC) $(LIBFLAGS) -c cpy_lib/pam_test.c
+	sudo ld -x --shared -o /lib/x86_64-linux-gnu/security/pam_test.so ./pam_test.o
+	$(RM) ./pam_test.o
 
 clean:
 	$(RM) $(OBJS)
