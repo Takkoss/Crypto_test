@@ -5,14 +5,12 @@
 ## Login   <kostas.konovodoff@epitech.eu>
 ## 
 ## Started on  Thu Nov 23 17:15:28 2017 takos
-## Last update Thu Nov 23 21:48:23 2017 takos
+## Last update Thu Nov 23 21:55:24 2017 takos
 ##
 
-NAME		= test
+NAME		= pam_tek_module.so
 
-SRCS		= pam_main.c
-
-LDFLAGS		= -lpam -lpam_misc
+SRCS		= pam_test.c
 
 RM		= rm -f
 
@@ -20,10 +18,17 @@ OBJS		= $(SRCS:.c=.o)
 
 CC		= gcc
 
+LD		 = ld
+
+%.o: %.c
+	$(CC) -fPIC -c -o $@ $<
+
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
+	$(LD) --shared -o $(NAME) $(OBJS)
+	sudo mv $(NAME) /lib/security/
+	rm $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
