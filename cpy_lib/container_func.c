@@ -54,6 +54,8 @@ int	open_container(const char *user, const char *password, int format)
     }
   asprintf(&buffer, "sudo mount /dev/mapper/container-%s /home/%s/secure_data-rw/", user, user);
   system(buffer);
+  free(buffer);
+  asprintf(&buffer, "sudo chmod -R u=rw /home/%s/secure_data-rw", user);
   return (free_ptrs(buffer, path, 1));
 }
 

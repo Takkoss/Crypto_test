@@ -2,6 +2,7 @@
 #include <security/pam_modules.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "container_func.h"
 
 PAM_EXTERN int pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
@@ -26,11 +27,12 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, cons
   char	*password = NULL;
   int  retval = -1;
 
-  if ((retval = pam_get_user(pamh, &user, NULL)) != PAM_SUCCESS)
+  if ((retval = pam_get_user(pamh, &user, "Login:" )) != PAM_SUCCESS)
     return (retval);
   if ((retval = pam_get_item(pamh, PAM_AUTHTOK, (const void **)&password)) != PAM_SUCCESS)
     return (retval);
-  if (pam_set_data(pamh, "Password", password, &cleanup) != PAM_SUCCESS)
+  printf("In auth, pass = '%s'\n", password);
+  if (pam_set_data(pamh, "Password", strdup(password), &cleanup) != PAM_SUCCESS)
       return retval;
   return (PAM_SUCCESS);
 }
