@@ -31,8 +31,7 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, cons
     return (retval);
   if ((retval = pam_get_item(pamh, PAM_AUTHTOK, (const void **)&password)) != PAM_SUCCESS)
     return (retval);
-  printf("In auth, pass = '%s'\n", password);
-  if (pam_set_data(pamh, "Password", strdup(password), &cleanup) != PAM_SUCCESS)
+  if ((retval = pam_set_data(pamh, "Password", strdup(password), &cleanup)) != PAM_SUCCESS)
       return retval;
   return (PAM_SUCCESS);
 }
@@ -60,4 +59,23 @@ PAM_EXTERN int	pam_sm_close_session(pam_handle_t *pamh, int flags, int argc, con
     return (retval);
   close_container(user);
   return (PAM_SUCCESS);
+}
+
+PAM_EXTERN int	pam_sm_chauthtok(pam_handle_t *pamh, int flags, int agc, const char **argv)
+{
+  const char *user = NULL;
+  char *old_pass = NULL;
+  char *new_pass = NULL;
+  int retval = -1;
+
+  if ((retval = pam_get_user(pamh, &user, NULL)) != PAM_SUCCESS)
+    return (retval);
+  if ((retval = pam_get_item(pamh, PAM_OLDAUTHTOK, (const void **)&old_pass)) != PAM_SUCCESS)
+    return (retval);
+  if ((retval = pam_get_item(pamh, PAM_AUTHTOK, (const void **)&new_pass)) != PAM_SUCCESS)
+    return (retval);
+  if ((retval = pam_set_data(pamh, "Password", strdup(new_pass), &cleanup)) != PAM_SUCCESS)
+    return (retval);
+  change_passphrase(old_pass, new_pass, user);
+  return PAM_SUCCESS;
 }

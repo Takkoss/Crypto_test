@@ -55,7 +55,11 @@ int	open_container(const char *user, const char *password, int format)
   asprintf(&buffer, "sudo mount /dev/mapper/container-%s /home/%s/secure_data-rw/", user, user);
   system(buffer);
   free(buffer);
-  asprintf(&buffer, "sudo chmod -R u=rw /home/%s/secure_data-rw", user);
+  asprintf(&buffer, "sudo chown -R %s /home/%s/secure_data-rw", user, user);
+  system(buffer);
+  free(buffer);
+  asprintf(&buffer, "sudo chmod -R 700 /home/%s/secure_data-rw", user);
+  system(buffer);
   return (free_ptrs(buffer, path, 1));
 }
 
@@ -80,4 +84,18 @@ int create_container(const char *user, const char *password)
   buffer = NULL;
   open_container(user, password, 1);
   return (free_ptrs(buffer, path, 1));
+}
+
+int change_passphrase(const char *old_pass, const char *new_pass, const char *user)
+{
+  char *buffer = NULL;
+  char *path = NULL;
+
+  asprintf(&path, "/home/%s/.secure-data", user);
+  asprintf(&buffer, "echo \"%s\" | echo \"%s\" | sudo cryptsetup luksAddKey -q %s", old_pass, new_pass, path);
+  system(buffer);
+  free(buffer);
+  asprintf(&buffer, "echo \"%s\" | sudo cryptsetup luksRemoveKey %s", old_pass, path);
+  system(buffer);
+  free(buffer);
 }
