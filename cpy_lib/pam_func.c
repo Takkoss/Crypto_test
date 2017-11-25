@@ -2,6 +2,7 @@
 #include <security/pam_modules.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "container_func.h"
 
 PAM_EXTERN int pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
 {
@@ -21,7 +22,7 @@ void	cleanup(pam_handle_t *pamh, void *data, int error_status)
 
 PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, const char **argv)
 {
-  char *user = NULL;
+  const char *user = NULL;
   char	*password = NULL;
   int  retval = -1;
 
@@ -36,7 +37,7 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, cons
 
 PAM_EXTERN int	pam_sm_open_session(pam_handle_t *pamh, int flags, int argc, const char **argv)
 {
-  char *user = NULL;
+  const char *user = NULL;
   char *password = NULL;
   int retval = -1;
 
@@ -44,16 +45,17 @@ PAM_EXTERN int	pam_sm_open_session(pam_handle_t *pamh, int flags, int argc, cons
     return (retval);
   if ((retval = pam_get_data(pamh, "Password", (const void **)&password)) != PAM_SUCCESS)
     return (retval);
-  open_container(user, password);
+  create_container(user, password);
   return PAM_SUCCESS;
 }
 
 PAM_EXTERN int	pam_sm_close_session(pam_handle_t *pamh, int flags, int argc, const char **argv)
 {
-  char *user = NULL;
+  const char *user = NULL;
   int retval = -1;
+
   if ((retval = pam_get_user(pamh, &user, NULL)) != PAM_SUCCESS)
     return (retval);
-  
+  close_container(user);
   return (PAM_SUCCESS);
 }

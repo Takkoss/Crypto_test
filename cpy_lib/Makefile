@@ -5,12 +5,13 @@
 ## Login   <kostas.konovodoff@epitech.eu>
 ## 
 ## Started on  Thu Nov 23 17:15:28 2017 takos
-## Last update Thu Nov 23 21:55:24 2017 takos
+## Last update Sat Nov 25 18:39:58 2017 takos
 ##
 
 NAME		= pam_tek_module.so
 
-SRCS		= pam_test.c
+SRCS		= pam_func.c \
+		  container_func.c
 
 RM		= rm -f
 
@@ -27,8 +28,6 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(LD) --shared -o $(NAME) $(OBJS)
-	sudo mv $(NAME) /lib/security/
-	rm $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
