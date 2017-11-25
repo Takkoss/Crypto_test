@@ -68,14 +68,21 @@ PAM_EXTERN int	pam_sm_chauthtok(pam_handle_t *pamh, int flags, int agc, const ch
   char *new_pass = NULL;
   int retval = -1;
 
+  printf("chauthtok 1\n");
   if ((retval = pam_get_user(pamh, &user, NULL)) != PAM_SUCCESS)
     return (retval);
-  if ((retval = pam_get_item(pamh, PAM_OLDAUTHTOK, (const void **)&old_pass)) != PAM_SUCCESS)
+  printf("chauthtok 2\n");
+  if ((retval = pam_get_item(pamh, PAM_OLDAUTHTOK, (const void **)&old_pass)) != PAM_SUCCESS
+      || old_pass == NULL)
     return (retval);
-  if ((retval = pam_get_item(pamh, PAM_AUTHTOK, (const void **)&new_pass)) != PAM_SUCCESS)
+  printf("chauthtok 3\n");
+  if ((retval = pam_get_item(pamh, PAM_AUTHTOK, (const void **)&new_pass)) != PAM_SUCCESS
+      || new_pass == NULL)
     return (retval);
+  printf("chauthtok 4\n");
   if ((retval = pam_set_data(pamh, "Password", strdup(new_pass), &cleanup)) != PAM_SUCCESS)
     return (retval);
+  printf("chauthtok 5\n");
   change_passphrase(old_pass, new_pass, user);
   return PAM_SUCCESS;
 }
