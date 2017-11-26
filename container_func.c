@@ -44,7 +44,7 @@ int	open_container(const char *user, const char *password, int format)
   asprintf(&buffer, "echo \"%s\" | sudo cryptsetup luksOpen %s container-%s", password, path, user);
   system(buffer);
   free(buffer);
-  asprintf(&buffer, "mkdir /home/%s/secure_data-rw", user);
+  asprintf(&buffer, "mkdir -p /home/%s/secure_data-rw", user);
   system(buffer);
   free(buffer);
   if (format == 1)

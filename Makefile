@@ -35,6 +35,12 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 
+install: re
+	sudo ./register_pam_module.sh
+
+uninstall: fclean
+	sudo ./unregister_pam_module.sh
+
 re: fclean all
 
 .PHONY: all clean fclean re
