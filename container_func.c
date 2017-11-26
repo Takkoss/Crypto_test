@@ -1,3 +1,4 @@
+# define _GNU_SOURCE
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -91,13 +92,10 @@ void change_passphrase(const char *old_pass, const char *new_pass, const char *u
   char *buffer = NULL;
   char *path = NULL;
 
-  printf("Change passphrase received old_pass = %s, new_pass = %s, user = %s\n", old_pass, new_pass, user);
   asprintf(&path, "/home/%s/.secure-data", user);
-  printf("Change passphrase 1\n");
   asprintf(&buffer, "echo '%s\n%s\n' | sudo cryptsetup luksAddKey -q %s", old_pass, new_pass, path);
   system(buffer);
   free(buffer);
-  printf("Change passphrase 2\n");
   asprintf(&buffer, "echo '%s' | sudo cryptsetup luksRemoveKey %s", old_pass, path);
   system(buffer);
   free(buffer);

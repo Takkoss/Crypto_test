@@ -1,3 +1,0 @@
-# check authorization
-auth	required	pam_test.so
-account	required	pam_test.so

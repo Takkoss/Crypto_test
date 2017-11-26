@@ -5,14 +5,13 @@
 ## Login   <kostas.konovodoff@epitech.eu>
 ## 
 ## Started on  Thu Nov 23 17:15:28 2017 takos
-## Last update Thu Nov 23 21:48:23 2017 takos
+## Last update Sat Nov 25 18:39:58 2017 takos
 ##
 
-NAME		= test
+NAME		= pam_tek_module.so
 
-SRCS		= pam_main.c
-
-LDFLAGS		= -lpam -lpam_misc
+SRCS		= pam_func.c \
+		  container_func.c
 
 RM		= rm -f
 
@@ -20,10 +19,15 @@ OBJS		= $(SRCS:.c=.o)
 
 CC		= gcc
 
+LD		 = ld
+
+%.o: %.c
+	$(CC) -fPIC -c -o $@ $<
+
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
+	$(LD) --shared -o $(NAME) $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
