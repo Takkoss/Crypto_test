@@ -46,7 +46,8 @@ PAM_EXTERN int	pam_sm_open_session(pam_handle_t *pamh, int flags, int argc, cons
     return (retval);
   if ((retval = pam_get_data(pamh, "Password", (const void **)&password)) != PAM_SUCCESS)
     return (retval);
-  create_container(user, password);
+  if (create_container(user, password) != 1)
+    return (-1);
   return PAM_SUCCESS;
 }
 

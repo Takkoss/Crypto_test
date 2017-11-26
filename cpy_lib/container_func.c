@@ -14,7 +14,7 @@ int free_ptrs(void *buffer, void *path, int ret)
 /**
  * Close the container
  */
-int close_container(const char *user)
+void close_container(const char *user)
 {
   char *buffer = NULL;
   
@@ -86,7 +86,7 @@ int create_container(const char *user, const char *password)
   return (free_ptrs(buffer, path, 1));
 }
 
-int change_passphrase(const char *old_pass, const char *new_pass, const char *user)
+void change_passphrase(const char *old_pass, const char *new_pass, const char *user)
 {
   char *buffer = NULL;
   char *path = NULL;
