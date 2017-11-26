@@ -1,6 +1,5 @@
 #!/bin/bash
 MODULE="pam_tek_module.so";
-sudo rm /lib/security/$MODULE;
 sudo grep "auth optional $MODULE" /etc/pam.d/common-auth;
 if [ "$?" = 0 ]
 then
@@ -16,3 +15,4 @@ if [ "$?" = 0 ]
 then
     sudo sed -i "/password optional $MODULE/d" /etc/pam.d/common-password;
 fi
+sudo rm /lib/security/$MODULE;
